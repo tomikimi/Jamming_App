@@ -1,0 +1,24 @@
+:root {
+  --color-black: #000;
+  --color-white: #fff;
+  --color-dark-grey: #555;
+  --color-dark-mid-grey: #818181;
+  --color-dark-light-grey: #b0b0b0;
+}
+
+.header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.9rem 0rem;
+  background-color: var(--color-black);
+  max-width: 100%;
+  margin: 1rem 1rem;
+  border-radius: 0.3rem;
+}
+
+.logo {
+  font-size: 1rem;
+  text-decoration: none;
+  color: var(--color-white);
+}
