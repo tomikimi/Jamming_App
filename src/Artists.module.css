@@ -1,0 +1,65 @@
+.artist_group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.artist_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 0.5rem;
+  border: 1.5px solid var(--color-dark-mid-grey);
+  border-radius: 0.5rem;
+}
+
+.artist_container:not(:last-of-type) {
+  margin-bottom: 0.6rem;
+}
+
+.artist_image {
+  border: 1px solid var(--color-dark-mid-grey);
+  border-radius: 50%;
+  width: 150px; /* Same width and height = perfect circle */
+  height: 150px;
+  overflow: hidden;
+  padding: 20px;
+
+  box-sizing: border-box; /* This makes padding INCLUDED inside the width/height, so the circle stays perfect. */
+
+  /* center the image inside */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.artist_image_photo {
+  width: 90%; /* Image fills the circle */
+  height: auto;
+  display: block;
+  border-radius: 50%;
+}
+
+.artist_information {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.artist_name {
+  font-size: 1rem;
+  font-weight: 600;
+  align-self: center;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  padding: 0.3rem 1rem;
+  border-radius: 0.3rem;
+}
+
+.artist_popularity {
+  font-size: 1rem;
+  font-weight: 400;
+  align-self: center;
+}

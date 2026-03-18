@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Header from "./Header";
 import SearchArtist from "./SearchArtist";
+import Artist from "./Artists";
 // import reactLogo from "./assets/react.svg";
 // import viteLogo from "./assets/vite.svg";
 // import heroImg from "./assets/hero.png";
@@ -13,26 +14,27 @@ function App() {
 
   // Encode credentials to Base64
   // const encodedCredentials = btoa(`${client_id}:${client_secret}`);
-  useEffect(function () {
-    async function generateSpotifyAccessToken() {
-      const res = await fetch(`https://accounts.spotify.com/api/token`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: "Basic " + btoa(client_id + ":" + client_secret),
-        },
-        body: "grant_type=client_credentials",
-      });
-      const data = await res.json();
-      console.log(data);
-    }
-    generateSpotifyAccessToken();
-  }, []);
+  // useEffect(function () {
+  //   async function generateSpotifyAccessToken() {
+  //     const res = await fetch(`https://accounts.spotify.com/api/token`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/x-www-form-urlencoded",
+  //         Authorization: "Basic " + btoa(client_id + ":" + client_secret),
+  //       },
+  //       body: "grant_type=client_credentials",
+  //     });
+  //     const data = await res.json();
+  //     console.log(data);
+  //   }
+  //   generateSpotifyAccessToken();
+  // }, []);
 
   return (
     <>
       <Header></Header>
       <SearchArtist></SearchArtist>
+      <Artist></Artist>
       {/* <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
