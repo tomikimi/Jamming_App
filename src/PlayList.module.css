@@ -49,3 +49,48 @@
   border-radius: 1rem;
   padding: 0.4rem 1.4rem;
 }
+
+.myPlayList {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--color-black);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 1.8rem 0rem 1rem 0rem;
+}
+
+.myPlayList h2 {
+  font-size: 1.4rem;
+  font-weight: 500;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  border-radius: 0.2rem;
+  padding: 0.2rem 0.8rem;
+}
+.myPlayList h2 > span {
+  float: right;
+}
+.created_playList {
+  display: flex;
+  flex-direction: column;
+  margin: 1rem 0rem;
+}
+.created_playList .playList_item {
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.2rem 0.8rem;
+  font-size: 1rem;
+  border-radius: 0.2rem;
+  border: 0.1px solid var(--color-dark-light-grey);
+  box-shadow: 0.1rem 0.1rem 0.35rem var(--color-dark-light-grey);
+}
+
+.playList_item:not(:last-of-type) {
+  margin-bottom: 1rem;
+}
+
+.noPlayList p {
+  font-size: 1rem;
+  text-align: center;
+}

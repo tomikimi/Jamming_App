@@ -34,7 +34,32 @@ function PlayList() {
               </div>
             </form>
           </div>
-          <div></div>
+          <div className={PlayListStyle.myPlayList}>
+            <div className={PlayListStyle.noPlayList}>
+              <p>No PlayList Available...</p>
+            </div>
+            {/* <h2>
+              My PlayList <span>🎧</span>
+            </h2>
+            <div className={PlayListStyle.created_playList}>
+              <div className={PlayListStyle.playList_item}>
+                <span>PlayList 1</span>
+                <span>➕</span>
+              </div>
+              <div className={PlayListStyle.playList_item}>
+                <span>PlayList 2</span>
+                <span>➕</span>
+              </div>
+              <div className={PlayListStyle.playList_item}>
+                <span>PlayList 3</span>
+                <span>➕</span>
+              </div>
+              <div className={PlayListStyle.playList_item}>
+                <span>PlayList 4</span>
+                <span>➕</span>
+              </div>
+            </div> */}
+          </div>
         </div>
       </section>
     </>
