@@ -1,0 +1,51 @@
+.playList_container {
+  display: flex;
+  flex-direction: column;
+}
+
+.playlist_form {
+  border: 1px solid var(--color-black);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.playlist_form form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form_Control {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 0.5rem;
+}
+
+.form_Control label {
+  font-size: 1rem;
+  margin-bottom: 0.2rem;
+}
+
+.form_input {
+  border: 1.4px solid var(--color-black);
+  border-radius: 1rem;
+  padding: 0.5rem 0.6rem;
+}
+
+.form_input:focus {
+  outline: none;
+  border-color: var(--color-dark);
+}
+.btn_container {
+  align-self: center;
+}
+.btn_create {
+  margin: 1rem 0rem;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  font-weight: 500;
+  font-size: 1rem;
+  letter-spacing: 0.1rem;
+  border: 1px solid var(--color-black);
+  border-radius: 1rem;
+  padding: 0.4rem 1.4rem;
+}
