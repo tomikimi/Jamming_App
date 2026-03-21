@@ -2,10 +2,12 @@ import { useState, useEffect } from "react";
 import Header from "./Header";
 import SearchArtist from "./SearchArtist";
 import Artist from "./Artists";
+import ArtistPage from "./ArtistPage";
 // import reactLogo from "./assets/react.svg";
 // import viteLogo from "./assets/vite.svg";
 // import heroImg from "./assets/hero.png";
 import "./App.css";
+import PlayList from "./PlaysList";
 
 function App() {
   // const [count, setCount] = useState(0);
@@ -33,8 +35,10 @@ function App() {
   return (
     <>
       <Header></Header>
-      <SearchArtist></SearchArtist>
-      <Artist></Artist>
+      {/* <SearchArtist></SearchArtist>
+      <Artist></Artist> */}
+      {/* <ArtistPage></ArtistPage> */}
+      <PlayList></PlayList>
       {/* <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
