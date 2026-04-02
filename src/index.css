@@ -33,6 +33,18 @@ section {
   margin: 1rem 1rem;
 }
 
+.loading {
+  max-width: 100%;
+  margin: 5rem 5rem;
+  font-size: 1rem;
+  font-style: italic;
+  text-align: center;
+  background-color: var(--color-black);
+  color: var(--color-white);
+  padding: 0.4rem 0.5rem;
+  border-radius: 0.2rem;
+}
+
 /* :root {
   --text: #6b6375;
   --text-h: #08060d;

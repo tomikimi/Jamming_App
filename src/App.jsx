@@ -1,149 +1,98 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Header from "./Header";
 import SearchArtist from "./SearchArtist";
 import Artist from "./Artists";
 import ArtistPage from "./ArtistPage";
-// import reactLogo from "./assets/react.svg";
-// import viteLogo from "./assets/vite.svg";
-// import heroImg from "./assets/hero.png";
 import "./App.css";
 import PlayList from "./PlaysList";
+import { generateAccessToken } from "./util/utility";
+
+const Artists = [
+  {
+    id: 1,
+    artistName: "Felix Mehndelson",
+    popularity: "700",
+  },
+  {
+    id: 2,
+    artistName: "G.F Handel",
+    popularity: "1,000,000",
+  },
+  {
+    id: 3,
+    artistName: "Chandler Moore",
+    popularity: "2,000,000",
+  },
+  {
+    id: 4,
+    artistName: "Nathaniel Bassey",
+    popularity: "10,000,000",
+  },
+];
+
+const { VITE_API_TOKEN, VITE_CLIENT_ID, VITE_CLIENT_SECRET } = import.meta.env;
 
 function App() {
-  // const [count, setCount] = useState(0);
-  const client_id = "a8b8ccf0918b4687bb0ff6b8c1f5bec5";
-  const client_secret = "94e816ea67514040ae3ea363a346d8ee";
+  const [token, setToken] = useState("");
+  const [artist, setArtist] = useState(null);
+  const [addPlaylistForm, setAddPlayListForm] = useState(false);
+  const targetSection = useRef(null);
 
   // Encode credentials to Base64
-  // const encodedCredentials = btoa(`${client_id}:${client_secret}`);
-  // useEffect(function () {
-  //   async function generateSpotifyAccessToken() {
-  //     const res = await fetch(`https://accounts.spotify.com/api/token`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/x-www-form-urlencoded",
-  //         Authorization: "Basic " + btoa(client_id + ":" + client_secret),
-  //       },
-  //       body: "grant_type=client_credentials",
-  //     });
-  //     const data = await res.json();
-  //     console.log(data);
-  //   }
-  //   generateSpotifyAccessToken();
-  // }, []);
+  useEffect(function () {
+    const data = setTimeout(async function () {
+      const token = await generateAccessToken();
+      console.log(token);
+      setToken(token);
+    }, 2000);
+
+    return function () {
+      clearTimeout(data);
+    };
+  }, []);
+
+  function selectArtist(id) {
+    setArtist(Artists.find((artist) => artist.id === id));
+  }
+
+  function handleAddPlayListForm() {
+    setAddPlayListForm((currState) => !currState);
+    targetSection.current?.scrollIntoView({ behaviour: "smooth" });
+  }
 
   return (
     <>
       <Header></Header>
-      {/* <SearchArtist></SearchArtist>
-      <Artist></Artist> */}
+      {token ? (
+        <>
+          {artist === null ? (
+            <>
+              <SearchArtist token={token}></SearchArtist>
+              <Artist
+                artists={Artists}
+                handleSelectArtist={selectArtist}
+              ></Artist>
+            </>
+          ) : (
+            <>
+              <ArtistPage
+                artist={artist}
+                handleAddPlayListForm={handleAddPlayListForm}
+              ></ArtistPage>
+              {addPlaylistForm ? (
+                <PlayList artist={artist} target={targetSection}></PlayList>
+              ) : (
+                ""
+              )}
+            </>
+          )}
+        </>
+      ) : (
+        <p className="loading">Loading...</p>
+      )}
+
       {/* <ArtistPage></ArtistPage> */}
-      <PlayList></PlayList>
-      {/* <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section> */}
+      {/* <PlayList></PlayList> */}
     </>
   );
 }

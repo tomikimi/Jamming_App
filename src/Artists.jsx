@@ -1,55 +1,33 @@
 import ArtistStyle from "./Artists.module.css";
 import myImage from "./assets/hero.png";
-function Artist() {
+function Artist({ artists, handleSelectArtist }) {
   return (
     <>
       <section>
         <div className={ArtistStyle.artist_group}>
-          <div className={ArtistStyle.artist_container}>
-            <div className={ArtistStyle.artist_image}>
-              <img
-                src={myImage}
-                className={ArtistStyle.artist_image_photo}
-                alt="Artist Photo"
-              />
+          {artists.map((artist) => (
+            <div
+              key={artist.id}
+              className={ArtistStyle.artist_container}
+              onClick={() => handleSelectArtist(artist.id)}
+            >
+              <div className={ArtistStyle.artist_image}>
+                <img
+                  src={myImage}
+                  className={ArtistStyle.artist_image_photo}
+                  alt="Artist Photo"
+                />
+              </div>
+              <div className={ArtistStyle.artist_information}>
+                <span className={ArtistStyle.artist_name}>
+                  {artist.artistName}
+                </span>
+                <span className={ArtistStyle.artist_popularity}>
+                  {artist.popularity} Popularity
+                </span>
+              </div>
             </div>
-            <div className={ArtistStyle.artist_information}>
-              <span className={ArtistStyle.artist_name}>Artist Name</span>
-              <span className={ArtistStyle.artist_popularity}>
-                50 Popularity
-              </span>
-            </div>
-          </div>
-          <div className={ArtistStyle.artist_container}>
-            <div className={ArtistStyle.artist_image}>
-              <img
-                src={myImage}
-                className={ArtistStyle.artist_image_photo}
-                alt="Artist Photo"
-              />
-            </div>
-            <div className={ArtistStyle.artist_information}>
-              <span className={ArtistStyle.artist_name}>Artist Name</span>
-              <span className={ArtistStyle.artist_popularity}>
-                50 Popularity
-              </span>
-            </div>
-          </div>
-          <div className={ArtistStyle.artist_container}>
-            <div className={ArtistStyle.artist_image}>
-              <img
-                src={myImage}
-                className={ArtistStyle.artist_image_photo}
-                alt="Artist Photo"
-              />
-            </div>
-            <div className={ArtistStyle.artist_information}>
-              <span className={ArtistStyle.artist_name}>Artist Name</span>
-              <span className={ArtistStyle.artist_popularity}>
-                50 Popularity
-              </span>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
     </>
