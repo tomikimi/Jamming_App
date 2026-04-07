@@ -6,6 +6,7 @@ import ArtistPage from "./ArtistPage";
 import "./App.css";
 import PlayList from "./PlaysList";
 import { generateAccessToken } from "./util/utility";
+import PlayListView from "./PlayListView";
 
 const Artists = [
   {
@@ -36,6 +37,9 @@ function App() {
   const [token, setToken] = useState("");
   const [artist, setArtist] = useState(null);
   const [addPlaylistForm, setAddPlayListForm] = useState(false);
+  const [showPlayListView, setShowPlayListView] = useState(false);
+  const [playListSongs, setPlayListSongs] = useState(null);
+  const [selectedPlayList, setSelectedPlayList] = useState(null);
   const targetSection = useRef(null);
 
   // Encode credentials to Base64
@@ -60,6 +64,15 @@ function App() {
     targetSection.current?.scrollIntoView({ behaviour: "smooth" });
   }
 
+  function handleShowPlayListView(id) {
+    setShowPlayListView((currState) => !currState);
+    const playListData = localStorage.getItem("PlayList");
+    const jsonData = JSON.parse(playListData);
+    // setPlayListSongs(jsonData.find((playList) => playList.id === id));
+    setPlayListSongs(jsonData);
+    setSelectedPlayList(id);
+  }
+
   return (
     <>
       <Header></Header>
@@ -75,14 +88,28 @@ function App() {
             </>
           ) : (
             <>
-              <ArtistPage
-                artist={artist}
-                handleAddPlayListForm={handleAddPlayListForm}
-              ></ArtistPage>
-              {addPlaylistForm ? (
-                <PlayList artist={artist} target={targetSection}></PlayList>
+              {showPlayListView ? (
+                <PlayListView
+                  playListSongs={playListSongs}
+                  selectedPlayList={selectedPlayList}
+                ></PlayListView>
               ) : (
-                ""
+                <>
+                  <ArtistPage
+                    artist={artist}
+                    handleAddPlayListForm={handleAddPlayListForm}
+                  ></ArtistPage>
+
+                  {addPlaylistForm ? (
+                    <PlayList
+                      artist={artist}
+                      target={targetSection}
+                      handleShowPlayListView={handleShowPlayListView}
+                    ></PlayList>
+                  ) : (
+                    ""
+                  )}
+                </>
               )}
             </>
           )}

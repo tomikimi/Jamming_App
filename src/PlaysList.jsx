@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { generateRandomNumber } from "./util/utility";
 import PlayListStyle from "./PlayList.module.css";
 
-function PlayList({ target, artist }) {
+function PlayList({ target, artist, handleShowPlayListView }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [playList, setPlayList] = useState([]);
@@ -41,8 +41,8 @@ function PlayList({ target, artist }) {
     );
     if (confirm) {
       localStorage.setItem("PlayList", JSON.stringify(copyPlayListData));
+      handleShowPlayListView(id);
     }
-    // console.log(JSON.parse(localStorage.getItem("PlayList")));
   }
 
   function handleSubmit(e) {
