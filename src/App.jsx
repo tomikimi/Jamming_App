@@ -40,20 +40,39 @@ function App() {
   const [showPlayListView, setShowPlayListView] = useState(false);
   const [playListSongs, setPlayListSongs] = useState(null);
   const [selectedPlayList, setSelectedPlayList] = useState(null);
+  const [tokenTimer, setTokenTimer] = useState(0);
   const targetSection = useRef(null);
 
   // Encode credentials to Base64
-  useEffect(function () {
-    const data = setTimeout(async function () {
-      const token = await generateAccessToken();
-      console.log(token);
-      setToken(token);
-    }, 2000);
+  useEffect(
+    function () {
+      const data = setTimeout(async function () {
+        if (tokenTimer === 0) {
+          const token = await generateAccessToken();
+          console.log(token);
+          setTokenTimer(token.expires_in);
+          setToken(token.access_token);
+        } else {
+          setTokenTimer((currState) => (currState = currState - 1));
+          console.log(tokenTimer);
+        }
+      }, 2000);
 
-    return function () {
-      clearTimeout(data);
-    };
-  }, []);
+      return function () {
+        clearTimeout(data);
+      };
+    },
+    [tokenTimer],
+  );
+
+  // let timer = setInterval(() => {
+  //   setTokenTimer((currState) => currState--);
+  //   console.log(tokenTimer);
+  //   if (tokenTimer < 0) {
+  //     return;
+  //   }
+  //   clearInterval(timer);
+  // }, 1000);
 
   function selectArtist(id) {
     setArtist(Artists.find((artist) => artist.id === id));

@@ -2,16 +2,15 @@ import { useState } from "react";
 import playListViewCSS from "./PlayListView.module.css";
 
 function PlayListView({ playListSongs, selectedPlayList }) {
-  //   const { name, songs } = playListSongs;
-
   let copyPlayListData = [...playListSongs];
   const index = copyPlayListData.findIndex(
     (item) => item.id === selectedPlayList,
   );
-  console.log(index);
-  console.log(copyPlayListData);
-  const playListName = copyPlayListData[index].name;
   const [mySongs, setMySongs] = useState(copyPlayListData[index].songs);
+  const [editPlayListName, setEditPlayListName] = useState(false);
+  const [playListName, setPlayListName] = useState(
+    copyPlayListData[index].name,
+  );
 
   function handleRemoveSong(i) {
     const copySongs = [...mySongs];
@@ -26,10 +25,63 @@ function PlayListView({ playListSongs, selectedPlayList }) {
       setMySongs(copySongs);
     }
   }
+
+  function handleChangePlayListName(e) {
+    setPlayListName(e.target.value);
+  }
+
+  function handleEditPlayListName() {
+    const confirm = window.confirm(
+      "Are you sure you want to edit the playlist name...",
+    );
+    if (confirm) {
+      let data = JSON.parse(localStorage.getItem("PlayList"));
+      data[index].name = playListName;
+      localStorage.setItem("PlayList", JSON.stringify(data));
+
+      setPlayListName(data[index].name);
+      setEditPlayListName((currState) => !currState);
+    } else {
+      setEditPlayListName((currState) => !currState);
+    }
+  }
+
+  function handleEditPlayListNameView() {
+    setEditPlayListName((currState) => !currState);
+  }
+
   return (
     <>
       <section>
-        <h2>{playListName}</h2>
+        {editPlayListName ? (
+          <>
+            <div className={playListViewCSS.playListView_control}>
+              <input
+                type="text"
+                className={playListViewCSS.form_input}
+                onChange={handleChangePlayListName}
+                value={playListName}
+              />
+              <span
+                onClick={handleEditPlayListName}
+                className={playListViewCSS.playListView_button}
+              >
+                Update
+              </span>
+            </div>
+          </>
+        ) : (
+          <h2 className={playListViewCSS.playListView_control}>
+            {playListName}
+            <span
+              onClick={handleEditPlayListNameView}
+              className={playListViewCSS.playListView_button}
+            >
+              Edit
+            </span>
+          </h2>
+        )}
+
         <div className={playListViewCSS.playListView_Container}>
           {mySongs.map((song, i) => (
             <div key={i} className={playListViewCSS.playListView_songs}>

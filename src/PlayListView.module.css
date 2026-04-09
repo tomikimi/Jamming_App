@@ -35,3 +35,15 @@ h2 {
   border-radius: 0.9rem;
   padding: 0.2rem 0.5rem;
 }
+
+.form_input {
+  border: 1.4px solid var(--color-black);
+  border-radius: 1rem;
+  padding: 0.5rem 0.6rem;
+}
+
+.playListView_control {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
