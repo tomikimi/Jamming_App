@@ -1,11 +1,14 @@
 import ArtistStyle from "./Artists.module.css";
 import myImage from "./assets/hero.png";
 function Artist({ artists, handleSelectArtist }) {
+  console.log(artists);
+  const { items } = { ...artists };
+
   return (
     <>
       <section>
         <div className={ArtistStyle.artist_group}>
-          {artists.map((artist) => (
+          {items.map((artist) => (
             <div
               key={artist.id}
               className={ArtistStyle.artist_container}
@@ -13,17 +16,15 @@ function Artist({ artists, handleSelectArtist }) {
             >
               <div className={ArtistStyle.artist_image}>
                 <img
-                  src={myImage}
+                  src={artist.album.images[0].url}
                   className={ArtistStyle.artist_image_photo}
                   alt="Artist Photo"
                 />
               </div>
               <div className={ArtistStyle.artist_information}>
-                <span className={ArtistStyle.artist_name}>
-                  {artist.artistName}
-                </span>
+                <span className={ArtistStyle.artist_name}>{artist.name}</span>
                 <span className={ArtistStyle.artist_popularity}>
-                  {artist.popularity} Popularity
+                  Album:{artist.album.name}
                 </span>
               </div>
             </div>

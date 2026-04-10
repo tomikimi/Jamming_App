@@ -5,34 +5,36 @@ import Artist from "./Artists";
 import ArtistPage from "./ArtistPage";
 import "./App.css";
 import PlayList from "./PlaysList";
-import { generateAccessToken } from "./util/utility";
+import { generateAccessToken, convertSecstoTime } from "./util/utility";
 import PlayListView from "./PlayListView";
+import PlayListStyle from "./PlayList.module.css";
 
-const Artists = [
-  {
-    id: 1,
-    artistName: "Felix Mehndelson",
-    popularity: "700",
-  },
-  {
-    id: 2,
-    artistName: "G.F Handel",
-    popularity: "1,000,000",
-  },
-  {
-    id: 3,
-    artistName: "Chandler Moore",
-    popularity: "2,000,000",
-  },
-  {
-    id: 4,
-    artistName: "Nathaniel Bassey",
-    popularity: "10,000,000",
-  },
-];
+// const Artists = [
+//   {
+//     id: 1,
+//     artistName: "Felix Mehndelson",
+//     popularity: "700",
+//   },
+//   {
+//     id: 2,
+//     artistName: "G.F Handel",
+//     popularity: "1,000,000",
+//   },
+//   {
+//     id: 3,
+//     artistName: "Chandler Moore",
+//     popularity: "2,000,000",
+//   },
+//   {
+//     id: 4,
+//     artistName: "Nathaniel Bassey",
+//     popularity: "10,000,000",
+//   },
+// ];
 
 const { VITE_API_TOKEN, VITE_CLIENT_ID, VITE_CLIENT_SECRET } = import.meta.env;
-
+let tokenTimeStamp = null;
+let currentTimeStamp = new Date();
 function App() {
   const [token, setToken] = useState("");
   const [artist, setArtist] = useState(null);
@@ -40,42 +42,47 @@ function App() {
   const [showPlayListView, setShowPlayListView] = useState(false);
   const [playListSongs, setPlayListSongs] = useState(null);
   const [selectedPlayList, setSelectedPlayList] = useState(null);
-  const [tokenTimer, setTokenTimer] = useState(0);
+  // const [tokenTimer, setTokenTimer] = useState(0);
   const targetSection = useRef(null);
 
   // Encode credentials to Base64
-  useEffect(
-    function () {
-      const data = setTimeout(async function () {
-        if (tokenTimer === 0) {
-          const token = await generateAccessToken();
-          console.log(token);
-          setTokenTimer(token.expires_in);
-          setToken(token.access_token);
-        } else {
-          setTokenTimer((currState) => (currState = currState - 1));
-          console.log(tokenTimer);
-        }
-      }, 2000);
+  useEffect(function () {
+    const data = setTimeout(async function () {
+      if (tokenTimeStamp === null) {
+        const token = await generateAccessToken();
+        // console.log(token);
+        // setTokenTimer(token.expires_in);
+        setToken(token.access_token);
+        // }
+        // else {
+        //   setTokenTimer((currState) => (currState = currState - 1));
+        //   console.log(tokenTimer);
+        // }
+        tokenTimeStamp = convertSecstoTime(token.expires_in);
+        console.log(`New Time Stamp ${convertSecstoTime(token.expires_in)}`);
+      } else if (currentTimeStamp > tokenTimeStamp) {
+        const token = await generateAccessToken();
+        // console.log(token);
+        // setTokenTimer(token.expires_in);
+        setToken(token.access_token);
+        // }
+        // else {
+        //   setTokenTimer((currState) => (currState = currState - 1));
+        //   console.log(tokenTimer);
+        // }
+        tokenTimeStamp = convertSecstoTime(token.expires_in);
+        console.log(`Renewed TimeStamp ${convertSecstoTime(token.expires_in)}`);
+      }
+    }, 2000);
 
-      return function () {
-        clearTimeout(data);
-      };
-    },
-    [tokenTimer],
-  );
-
-  // let timer = setInterval(() => {
-  //   setTokenTimer((currState) => currState--);
-  //   console.log(tokenTimer);
-  //   if (tokenTimer < 0) {
-  //     return;
-  //   }
-  //   clearInterval(timer);
-  // }, 1000);
+    return function () {
+      clearTimeout(data);
+    };
+  }, []);
 
   function selectArtist(id) {
-    setArtist(Artists.find((artist) => artist.id === id));
+    // setArtist(Artists.find((artist) => artist.id === id));
+    setArtist(artist.find((artist) => artist.id === id));
   }
 
   function handleAddPlayListForm() {
@@ -92,16 +99,41 @@ function App() {
     setSelectedPlayList(id);
   }
 
+  function handleLoadArtist(data) {
+    setArtist(data);
+  }
+
   return (
     <>
       <Header></Header>
       {token ? (
         <>
+          <SearchArtist
+            token={token}
+            handleLoadArtist={handleLoadArtist}
+          ></SearchArtist>
+          {artist ? (
+            <Artist artists={artist} handleSelectArtist={selectArtist}></Artist>
+          ) : (
+            <div className={PlayListStyle.noPlayList}>
+              <p>No PlayList Available...</p>
+            </div>
+          )}
+        </>
+      ) : (
+        <p className="loading">Loading...</p>
+      )}
+      {/* {token ? (
+        <>
           {artist === null ? (
             <>
-              <SearchArtist token={token}></SearchArtist>
+              <SearchArtist
+                token={token}
+                handleLoadArtist={handleLoadArtist}
+              ></SearchArtist>
+
               <Artist
-                artists={Artists}
+                artists={artist}
                 handleSelectArtist={selectArtist}
               ></Artist>
             </>
@@ -135,7 +167,7 @@ function App() {
         </>
       ) : (
         <p className="loading">Loading...</p>
-      )}
+      )} */}
 
       {/* <ArtistPage></ArtistPage> */}
       {/* <PlayList></PlayList> */}

@@ -9,39 +9,74 @@ const { VITE_API_URL, VITE_CLIENT_ID, VITE_CLIENT_SECRET } = import.meta.env;
 //   console.log(token);
 // }, 2000);
 
-function SearchArtist({ token }) {
-  const [searchArtist, setSearchArtist] = useState("All");
+function SearchArtist({ token, handleLoadArtist }) {
+  const [searchArtist, setSearchArtist] = useState("");
 
-  console.log(token);
+  // console.log(token);
 
   function handleSearchArtist(e) {
     setSearchArtist(e.target.value);
   }
 
-  useEffect(
-    function () {
-      async function fetchArtist() {
-        const res = await fetch(
-          `${VITE_API_URL}search?q=${searchArtist}&type=artist&limit=5`,
-          {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-              Authorization: "Bearer " + token,
-            },
+  async function handleSearchSubmit(e) {
+    try {
+      e.preventDefault();
+      const res = await fetch(
+        `${VITE_API_URL}search?q=${searchArtist}&type=track&limit=5`,
+        {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization: "Bearer " + token,
           },
-        );
-        const data = await res.json();
-        console.log(data);
-      }
-      fetchArtist();
-    },
-    [searchArtist, token],
-  );
+        },
+      );
+      const data = await res.json();
+      handleLoadArtist(data.tracks);
+      console.log(data.tracks);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  // useEffect(
+  //   function () {
+  //     const controller = new AbortController();
+  //     async function fetchArtist() {
+  //       try {
+  //         const res = await fetch(
+  //           `${VITE_API_URL}search?q=${searchArtist}&type=track&limit=5`,
+  //           {
+  //             headers: {
+  //               "Content-Type": "application/x-www-form-urlencoded",
+  //               Authorization: "Bearer " + token,
+  //             },
+  //             signal: controller.signal,
+  //           },
+  //         );
+  //         const data = await res.json();
+  //         handleLoadArtist(data.artists);
+  //         console.log(data.artists);
+  //       } catch (error) {
+  //         console.log(error.message);
+  //       }
+  //     }
+
+  //     if (searchArtist !== "" && searchArtist.length >= 3) {
+  //       fetchArtist();
+  //     }
+
+  //     return function () {
+  //       controller.abort();
+  //     };
+  //   },
+  //   [searchArtist, token, handleLoadArtist],
+  // );
 
   return (
     <>
-      {token ? (
-        <section className={SearchArtistStyle.search_container}>
+      {/* {token ? ( */}
+      <section className={SearchArtistStyle.search_container}>
+        <form action="" onSubmit={handleSearchSubmit}>
           <div className={SearchArtistStyle.search_information}>
             <h1>Hi 👋🏽 Music Lover</h1>
             <p>What will you like to Jamm 🎧 to ... </p>
@@ -57,10 +92,11 @@ function SearchArtist({ token }) {
               className={SearchArtistStyle.search_input}
             />
           </div>
-        </section>
-      ) : (
-        <p>fetching</p>
-      )}
+        </form>
+      </section>
+      {/* // ) : (
+      //   <p>fetching</p>
+      // )} */}
     </>
   );
 }
