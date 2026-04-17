@@ -44,7 +44,7 @@
 }
 
 .artist_genre {
-  display: inline-flex;
+  display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 0.5rem;

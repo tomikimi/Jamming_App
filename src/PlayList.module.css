@@ -35,6 +35,9 @@
   outline: none;
   border-color: var(--color-dark);
 }
+.form_hide {
+  display: none;
+}
 .btn_container {
   align-self: center;
 }

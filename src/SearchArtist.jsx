@@ -1,13 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 // import { generateAccessToken } from "./util/utility";
 import SearchArtistStyle from "./SearchArtist.module.css";
 
 const { VITE_API_URL, VITE_CLIENT_ID, VITE_CLIENT_SECRET } = import.meta.env;
-
-// setTimeout(async function () {
-//   const token = await generateAccessToken();
-//   console.log(token);
-// }, 2000);
 
 function SearchArtist({ token, handleLoadArtist }) {
   const [searchArtist, setSearchArtist] = useState("");
@@ -31,10 +26,15 @@ function SearchArtist({ token, handleLoadArtist }) {
         },
       );
       const data = await res.json();
-      handleLoadArtist(data.tracks);
-      console.log(data.tracks);
+      if (!data.tracks) {
+        throw new Error(
+          `An Error occured while fetching data, please try again`,
+        );
+      }
+      handleLoadArtist(data.tracks.items);
     } catch (error) {
-      console.log(error.message);
+      console.error(error.message);
+      handleLoadArtist(error.message);
     }
   }
 
