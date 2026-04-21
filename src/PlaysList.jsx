@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { generateRandomNumber } from "./util/utility";
 import PlayListStyle from "./PlayList.module.css";
 
 const {
@@ -11,19 +10,18 @@ const {
 } = import.meta.env;
 
 function PlayList({
-  artist,
   artistInfo,
   target,
   token,
   playListForm,
-  handleShowPlayListView,
+  handleFetchPlayListItem,
+  handleShowPlayListStatus,
+  handleArtistInfo,
 }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [playList, setPlayList] = useState();
   const [refresh, setRefresh] = useState(false);
-
-  console.log(artistInfo);
 
   useEffect(
     function () {
@@ -36,7 +34,6 @@ function PlayList({
             },
           });
           const data = await res.json();
-          console.log(data.items);
           setPlayList(data.items);
         }
         fetchPlayList();
@@ -96,9 +93,8 @@ function PlayList({
         body: JSON.stringify({ uris: [selectedSong] }),
       });
       const data = await res.json();
-      console.log(data);
       if (data.snapshot_id) {
-        console.log("Track Successfully added to Playlist");
+        window.alert("Track Successfully added to Playlist");
       }
     }
   }
@@ -130,7 +126,6 @@ function PlayList({
         });
 
         const data = await res.json();
-        console.log(data);
         setRefresh((currState) => !currState);
         setName("");
         setDescription("");
@@ -168,6 +163,14 @@ function PlayList({
     //   setDescription("");
     // }, 2000);
     // }
+  }
+
+  function handleReturnPage(e) {
+    e.preventDefault();
+    handleArtistInfo(null);
+    setTimeout(() => {
+      handleShowPlayListStatus(false);
+    }, 3000);
   }
 
   return (
@@ -219,7 +222,17 @@ function PlayList({
                 <div className={PlayListStyle.created_playList}>
                   {playList.map((data) => (
                     <div key={data.id} className={PlayListStyle.playList_item}>
-                      <span>{data.name}</span>
+                      <span
+                        onClick={() =>
+                          handleFetchPlayListItem(
+                            data.id,
+                            data.name,
+                            data.snapshot_id,
+                          )
+                        }
+                      >
+                        {data.name}
+                      </span>
                       <span
                         id={artistInfo.tracks.items[0].uri}
                         onClick={() =>
@@ -234,19 +247,6 @@ function PlayList({
                       </span>
                     </div>
                   ))}
-
-                  {/* <div className={PlayListStyle.playList_item}>
-                    <span>PlayList 2</span>
-                    <span>➕</span>
-                  </div>
-                  <div className={PlayListStyle.playList_item}>
-                    <span>PlayList 3</span>
-                    <span>➕</span>
-                  </div>
-                  <div className={PlayListStyle.playList_item}>
-                    <span>PlayList 4</span>
-                    <span>➕</span>
-                  </div> */}
                 </div>
               </>
             ) : (
@@ -255,6 +255,11 @@ function PlayList({
               </div>
             )}
           </div>
+        </div>
+        <div className="btn-container float-bottom">
+          <button className="btn" onClick={handleReturnPage}>
+            &larr; Return
+          </button>
         </div>
       </section>
     </>

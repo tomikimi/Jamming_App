@@ -7,8 +7,6 @@ const { VITE_API_URL, VITE_CLIENT_ID, VITE_CLIENT_SECRET } = import.meta.env;
 function SearchArtist({ token, handleLoadArtist }) {
   const [searchArtist, setSearchArtist] = useState("");
 
-  // console.log(token);
-
   function handleSearchArtist(e) {
     setSearchArtist(e.target.value);
   }
@@ -26,6 +24,7 @@ function SearchArtist({ token, handleLoadArtist }) {
         },
       );
       const data = await res.json();
+
       if (!data.tracks) {
         throw new Error(
           `An Error occured while fetching data, please try again`,
