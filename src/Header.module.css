@@ -23,3 +23,18 @@
   text-decoration: none;
   color: var(--color-white);
 }
+
+/* TABLET STYLES */
+@media only screen and (min-width: 600px) {
+  .logo {
+    font-size: 1.2rem;
+  }
+}
+
+/* DESKTOP STYLES */
+@media only screen and (min-width: 900px) {
+  .header {
+    max-width: 60%;
+    margin: 1rem auto;
+  }
+}

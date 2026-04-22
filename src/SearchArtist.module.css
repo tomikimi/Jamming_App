@@ -24,3 +24,35 @@
   outline: none;
   border-color: var(--color-dark);
 }
+
+/* TABLET STYLES */
+@media only screen and (min-width: 600px) {
+  .search_information {
+    text-align: center;
+    margin: 1.5rem 0rem;
+  }
+  .search_input {
+    padding: 0.5rem 1.5rem;
+  }
+}
+
+/* DESKTOP STYLES */
+@media only screen and (min-width: 900px) {
+  .search_information h1 {
+    font-size: 2rem;
+  }
+
+  .search_information p {
+    font-size: 1.2rem;
+  }
+
+  .search_input {
+    width: 60%;
+    font-size: 1.2rem;
+  }
+
+  .search_control {
+    display: flex;
+    justify-content: center;
+  }
+}

@@ -85,7 +85,7 @@ function SearchArtist({ token, handleLoadArtist }) {
               type="text"
               name=""
               id=""
-              placeholder="Search Here"
+              placeholder="Search for your favourite artist Here... 🎧"
               value={searchArtist}
               onChange={handleSearchArtist}
               className={SearchArtistStyle.search_input}

@@ -49,3 +49,23 @@ h2 {
   gap: 0.8rem;
   margin-bottom: 2.5rem;
 }
+
+/* TABLET STYLES */
+@media only screen and (min-width: 600px) {
+  .playListView_Container {
+    width: 65%;
+    margin: 1rem auto;
+  }
+}
+
+/* DESKTOP STYLES */
+@media only screen and (min-width: 900px) {
+  .playListView_Container {
+    width: 50%;
+  }
+
+  .playListView_control {
+    width: 60%;
+    margin: 1rem auto;
+  }
+}

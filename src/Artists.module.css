@@ -63,3 +63,34 @@
   font-weight: 400;
   align-self: center;
 }
+
+/* TABLET STYLES */
+@media only screen and (min-width: 600px) {
+  .artist_group {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .artist_container {
+    flex-basis: 49%;
+  }
+}
+
+/* DESKTOP STYLES */
+@media only screen and (min-width: 900px) {
+  .artist_group {
+    justify-content: center;
+  }
+
+  .artist_container {
+    flex-basis: 33%;
+  }
+
+  .artist_image {
+    width: 180px;
+    height: 180px;
+  }
+
+  .artist_image_photo {
+    width: 100%;
+  }
+}

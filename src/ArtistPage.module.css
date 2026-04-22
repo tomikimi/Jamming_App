@@ -67,3 +67,31 @@
   border-radius: 0.2rem;
   padding: 0.2rem 0.2rem;
 }
+
+/* DESKTOP STYLES */
+@media only screen and (min-width: 900px) {
+  .artistPage_image_cover {
+    width: 180px; /* Same width and height = perfect circle */
+    height: 180px;
+  }
+  .artist_image {
+    width: 100%;
+  }
+
+  .artist_name {
+    font-size: 1.6rem;
+  }
+
+  .artist_follower {
+    font-size: 1.4rem;
+  }
+
+  .artist_genre span {
+    font-size: 1rem;
+  }
+
+  .btn_addPlaylist {
+    font-size: 1rem;
+    padding: 0.4rem 0.6rem;
+  }
+}

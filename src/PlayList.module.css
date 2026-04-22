@@ -97,3 +97,30 @@
   font-size: 1rem;
   text-align: center;
 }
+
+/* TABLET STYLES */
+@media only screen and (min-width: 600px) {
+  .noPlayList {
+    margin-top: 2.5rem;
+  }
+  .playlist_form {
+    width: 60%;
+    margin: 1.5rem auto;
+  }
+  .myPlayList {
+    width: 60%;
+    margin: auto;
+  }
+}
+
+/* DESKTOP STYLES */
+@media only screen and (min-width: 900px) {
+  .playlist_form {
+    width: 50%;
+    margin: 1.5rem auto;
+  }
+  .myPlayList {
+    width: 50%;
+    margin: auto;
+  }
+}
