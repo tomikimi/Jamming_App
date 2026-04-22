@@ -70,6 +70,8 @@ function App() {
   // const [tokenTimer, setTokenTimer] = useState(0);
   const targetSection = useRef(null);
 
+  console.log(VITE_API_URL);
+
   function handleLogin(e) {
     e.preventDefault();
     window.location = `${VITE_AUTHORIZE_URI}?client_id=${VITE_CLIENT_ID}&redirect_uri=${VITE_REDIRECT_URI_2}&scope=${SCOPE_URL_PARAM}&response_type=code&show_dialog=true`;
