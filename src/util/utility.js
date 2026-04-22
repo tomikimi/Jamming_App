@@ -49,3 +49,13 @@ export function convertSecstoTime(expires_in) {
   //   return `${hDisplay}:${mDisplay}:${sDisplay}`;
   // }
 }
+
+export function getLocalStorage(key, defaultValue) {
+  try {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : defaultValue;
+  } catch (error) {
+    console.error(error.message);
+    return defaultValue;
+  }
+}

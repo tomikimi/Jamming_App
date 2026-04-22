@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { getLocalStorage } from "./util/utility";
 import PlayListStyle from "./PlayList.module.css";
 import playListViewCSS from "./PlayListView.module.css";
 
@@ -10,9 +11,7 @@ const {
   VITE_API_TOKEN,
 } = import.meta.env;
 
-const [id1, playlist1, snapshot_id] = JSON.parse(
-  localStorage.getItem("PlayListDetail"),
-);
+const [id1, playlist1, snapshot_id] = getLocalStorage("PlayListDetail", {});
 
 function PlayListView({ playListSongs, token, handleShowPlayListDetail }) {
   //   let copyPlayListData = [...playListSongs];
