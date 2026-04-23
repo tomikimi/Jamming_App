@@ -1,10 +1,10 @@
 import { useState } from "react";
-// import { generateAccessToken } from "./util/utility";
+import { getCurrentTimeStamp, getLocalStorage } from "./util/utility";
 import SearchArtistStyle from "./SearchArtist.module.css";
 
 const { VITE_API_URL, VITE_CLIENT_ID, VITE_CLIENT_SECRET } = import.meta.env;
 
-function SearchArtist({ token, handleLoadArtist }) {
+function SearchArtist({ token, handleLoadArtist, handleToken }) {
   const [searchArtist, setSearchArtist] = useState("");
 
   function handleSearchArtist(e) {
@@ -14,23 +14,34 @@ function SearchArtist({ token, handleLoadArtist }) {
   async function handleSearchSubmit(e) {
     try {
       e.preventDefault();
-      const res = await fetch(
-        `${VITE_API_URL}search?q=${searchArtist}&type=track&limit=5`,
-        {
-          headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-            Authorization: "Bearer " + token,
-          },
-        },
+      const currentTimeStamp = getCurrentTimeStamp();
+      const tokenExpiryTime = new Date(
+        getLocalStorage("TokenExpirationTime", {}),
       );
-      const data = await res.json();
-
-      if (!data.tracks) {
-        throw new Error(
-          `An Error occured while fetching data, please try again`,
+      if (tokenExpiryTime > currentTimeStamp) {
+        const res = await fetch(
+          `${VITE_API_URL}search?q=${searchArtist}&type=track&limit=5`,
+          {
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+              Authorization: "Bearer " + token,
+            },
+          },
         );
+        const data = await res.json();
+
+        if (!data.tracks) {
+          throw new Error(
+            `An Error occured while fetching data, please try again`,
+          );
+        }
+        handleLoadArtist(data.tracks.items);
+      } else {
+        const alert = window.alert("Your Token has expired, login to Spotify");
+        if (alert) {
+          handleToken([]);
+        }
       }
-      handleLoadArtist(data.tracks.items);
     } catch (error) {
       console.error(error.message);
       handleLoadArtist(error.message);

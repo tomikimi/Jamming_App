@@ -93,6 +93,10 @@
   margin-bottom: 1rem;
 }
 
+.noPlayList {
+  margin-top: 2rem;
+}
+
 .noPlayList p {
   font-size: 1rem;
   text-align: center;

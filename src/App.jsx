@@ -9,37 +9,15 @@ import { generateAccessToken, convertSecstoTime } from "./util/utility";
 import PlayListView from "./PlayListView";
 import PlayListStyle from "./PlayList.module.css";
 
-// const Artists = [
-//   {
-//     id: 1,
-//     artistName: "Felix Mehndelson",
-//     popularity: "700",
-//   },
-//   {
-//     id: 2,
-//     artistName: "G.F Handel",
-//     popularity: "1,000,000",
-//   },
-//   {
-//     id: 3,
-//     artistName: "Chandler Moore",
-//     popularity: "2,000,000",
-//   },
-//   {
-//     id: 4,
-//     artistName: "Nathaniel Bassey",
-//     popularity: "10,000,000",
-//   },
-// ];
-
 const {
   VITE_API_URL,
+  VITE_APP_ENV,
   VITE_CLIENT_ID,
   VITE_AUTHORIZE_URI,
   VITE_REDIRECT_URI_2,
 } = import.meta.env;
-let tokenTimeStamp = null;
-let currentTimeStamp = new Date();
+// let tokenTimeStamp = null;
+// let currentTimeStamp = new Date();
 // https://accounts.spotify.com/authorize?client_id=&redirect_uri=&scope=&response_type=&state=
 const SCOPES = [
   "playlist-read-collaborative",
@@ -63,17 +41,20 @@ function App() {
   const [token, setToken] = useState("");
   const [artist, setArtist] = useState(null);
   const [artistInfo, setArtistInfo] = useState([]);
+  const [spotifyAccess, setSpotifyAccess] = useState(false);
   const [addPlaylistForm, setAddPlayListForm] = useState(false);
   const [showPlayList, setShowPlayList] = useState(false);
   const [showPlayListDetail, setShowPlayListDetail] = useState(false);
   const [playListSongs, setPlayListSongs] = useState(null);
-  // const [tokenTimer, setTokenTimer] = useState(0);
+  const [tokenTimer, setTokenTimer] = useState(0);
   const targetSection = useRef(null);
 
-  console.log(VITE_API_URL);
+  console.log(VITE_APP_ENV);
+  console.log(VITE_REDIRECT_URI_2);
 
   function handleLogin(e) {
     e.preventDefault();
+    setSpotifyAccess(true);
     window.location = `${VITE_AUTHORIZE_URI}?client_id=${VITE_CLIENT_ID}&redirect_uri=${VITE_REDIRECT_URI_2}&scope=${SCOPE_URL_PARAM}&response_type=code&show_dialog=true`;
   }
 
@@ -84,8 +65,19 @@ function App() {
         const { code } = getSpotifyCode(window.location.search);
 
         const token = await generateAccessToken(code);
-        console.log(token);
         setToken(token.access_token);
+        const dataTime = convertSecstoTime(token.expires_in);
+        localStorage.setItem("TokenExpirationTime", JSON.stringify(dataTime));
+
+        // setTimeout(() => {
+        //   console.log(dataTime);
+        //   localStorage.setItem("TokenExpirationTime", JSON.stringify(dataTime));
+        // }, 3000);
+
+        // return function () {
+        //   clearTimeout(timeOut);
+        // };
+
         // setTokenTimer(token.expires_in);
       }
     }
@@ -186,6 +178,7 @@ function App() {
             <>
               <SearchArtist
                 token={token}
+                handleToken={setToken}
                 handleLoadArtist={handleLoadArtist}
               ></SearchArtist>
               {artist ? (
@@ -229,11 +222,21 @@ function App() {
         </>
       ) : (
         <>
-          <div className="btn-container">
-            <button onClick={handleLogin} className="btn_login">
-              Login to Spotify
-            </button>
-          </div>
+          {spotifyAccess === false ? (
+            <>
+              <div className="btn-container">
+                <button onClick={handleLogin} className="btn_login">
+                  Login to Spotify
+                </button>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className={PlayListStyle.noPlayList}>
+                <p>Loading...</p>
+              </div>
+            </>
+          )}
         </>
       )}
 

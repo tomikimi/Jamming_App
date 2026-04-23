@@ -11,16 +11,14 @@ const {
   VITE_API_TOKEN,
 } = import.meta.env;
 
-localStorage.setItem("PlayListDetail", JSON.stringify([1, 1, 1]));
-
-const [id1, playlist1, snapshot_id] = getLocalStorage("PlayListDetail", {});
+// localStorage.setItem("PlayListDetail", JSON.stringify([1, 1, 1]));
 
 function PlayListView({ playListSongs, token, handleShowPlayListDetail }) {
   //   let copyPlayListData = [...playListSongs];
   //   const index = copyPlayListData.findIndex(
   //     (item) => item.id === selectedPlayList,
   //   );
-
+  const [id1, playlist1, snapshot_id] = getLocalStorage("PlayListDetail", {});
   const [editPlayListName, setEditPlayListName] = useState(false);
   const [playListName, setPlayListName] = useState(playlist1);
 

@@ -34,21 +34,22 @@ export function convertSecstoTime(expires_in) {
   const date = new Date();
   const addHour = expires_in * 1000;
   const newDate = new Date(date.getTime() + addHour);
-  // date.setHours(date.getHours() + 1);
   return newDate;
-  //   function formatSeconds(totalSeconds) {
-  //   const hours = Math.floor(totalSeconds / 3600);
-  //   const minutes = Math.floor((totalSeconds % 3600) / 60);
-  //   const seconds = totalSeconds % 60;
-
-  //   // Use padStart to ensure two digits for minutes and seconds
-  //   const hDisplay = hours.toString().padStart(2, '0');
-  //   const mDisplay = minutes.toString().padStart(2, '0');
-  //   const sDisplay = seconds.toString().padStart(2, '0');
-
-  //   return `${hDisplay}:${mDisplay}:${sDisplay}`;
-  // }
 }
+
+// date.setHours(date.getHours() + 1);
+//   function formatSeconds(totalSeconds) {
+//   const hours = Math.floor(totalSeconds / 3600);
+//   const minutes = Math.floor((totalSeconds % 3600) / 60);
+//   const seconds = totalSeconds % 60;
+
+//   // Use padStart to ensure two digits for minutes and seconds
+//   const hDisplay = hours.toString().padStart(2, '0');
+//   const mDisplay = minutes.toString().padStart(2, '0');
+//   const sDisplay = seconds.toString().padStart(2, '0');
+
+//   return `${hDisplay}:${mDisplay}:${sDisplay}`;
+// }
 
 export function getLocalStorage(key, defaultValue) {
   try {
@@ -58,4 +59,8 @@ export function getLocalStorage(key, defaultValue) {
     console.error(error.message);
     return defaultValue;
   }
+}
+
+export function getCurrentTimeStamp() {
+  return new Date();
 }
