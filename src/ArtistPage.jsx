@@ -1,5 +1,4 @@
 import ArtistPageStyle from "./ArtistPage.module.css";
-import myImage from "./assets/hero.png";
 
 function ArtistPage({ artist, handleAddPlayListForm }) {
   console.log(artist);

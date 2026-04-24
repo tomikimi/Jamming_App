@@ -5,7 +5,12 @@ import Artist from "./Artists";
 import ArtistPage from "./ArtistPage";
 import "./App.css";
 import PlayList from "./PlaysList";
-import { generateAccessToken, convertSecstoTime } from "./util/utility";
+import {
+  generateAccessToken,
+  convertSecstoTime,
+  getCurrentTimeStamp,
+  getLocalStorage,
+} from "./util/utility";
 import PlayListView from "./PlayListView";
 import PlayListStyle from "./PlayList.module.css";
 
@@ -119,18 +124,30 @@ function App() {
   async function selectArtist(id) {
     // setArtist(Artists.find((artist) => artist.id === id));
     // setArtist(artist.find((artist) => artist.id === id));
-    console.log(id);
+    const currentTimeStamp = getCurrentTimeStamp();
+    const tokenExpiryTime = new Date(
+      getLocalStorage("TokenExpirationTime", {}),
+    );
     try {
-      const res = await fetch(`${VITE_API_URL}albums/${id}`, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: "Bearer " + token,
-        },
-      });
-      const data = await res.json();
-      if (data) {
-        setShowPlayList((currState) => !currState);
-        setArtistInfo(data);
+      if (tokenExpiryTime > currentTimeStamp) {
+        const res = await fetch(`${VITE_API_URL}albums/${id}`, {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization: "Bearer " + token,
+          },
+        });
+        const data = await res.json();
+        if (data) {
+          setShowPlayList((currState) => !currState);
+          setArtistInfo(data);
+        }
+      } else {
+        const confirm = window.confirm(
+          "Your Token has expired, login to Spotify",
+        );
+        if (confirm) {
+          setToken([]);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -138,23 +155,36 @@ function App() {
   }
 
   async function handleFetchPlayListItem(id, playListName, snapshot_id) {
+    const currentTimeStamp = getCurrentTimeStamp();
+    const tokenExpiryTime = new Date(
+      getLocalStorage("TokenExpirationTime", {}),
+    );
     try {
-      const res = await fetch(`${VITE_API_URL}playlists/${id}/items`, {
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-          Authorization: "Bearer " + token,
-        },
-      });
+      if (tokenExpiryTime > currentTimeStamp) {
+        const res = await fetch(`${VITE_API_URL}playlists/${id}/items`, {
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+            Authorization: "Bearer " + token,
+          },
+        });
 
-      const data = await res.json();
-      setPlayListSongs(data.items);
-      setTimeout(function () {
-        setShowPlayListDetail((currState) => !currState);
-        localStorage.setItem(
-          "PlayListDetail",
-          JSON.stringify([id, playListName, snapshot_id]),
+        const data = await res.json();
+        setPlayListSongs(data.items);
+        setTimeout(function () {
+          setShowPlayListDetail((currState) => !currState);
+          localStorage.setItem(
+            "PlayListDetail",
+            JSON.stringify([id, playListName, snapshot_id]),
+          );
+        }, 2000);
+      } else {
+        const confirm = window.confirm(
+          "Your Token has expired, login to Spotify",
         );
-      }, 2000);
+        if (confirm) {
+          setToken([]);
+        }
+      }
     } catch (error) {
       console.log(error.message);
     }
@@ -208,6 +238,7 @@ function App() {
                     handleFetchPlayListItem={handleFetchPlayListItem}
                     handleShowPlayListStatus={setShowPlayList}
                     handleArtistInfo={setArtist}
+                    handleToken={setToken}
                   ></PlayList>
                 </>
               ) : (
@@ -215,6 +246,7 @@ function App() {
                   playListSongs={playListSongs}
                   token={token}
                   handleShowPlayListDetail={setShowPlayListDetail}
+                  handleToken={setToken}
                 ></PlayListView>
               )}
             </>

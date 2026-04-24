@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getLocalStorage, getCurrentTimeStamp } from "./util/utility";
 import PlayListStyle from "./PlayList.module.css";
 
 const {
@@ -17,6 +18,7 @@ function PlayList({
   handleFetchPlayListItem,
   handleShowPlayListStatus,
   handleArtistInfo,
+  handleToken,
 }) {
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -27,21 +29,34 @@ function PlayList({
     function () {
       try {
         async function fetchPlayList() {
-          const res = await fetch(`${VITE_API_URL}me/playlists`, {
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded",
-              Authorization: "Bearer " + token,
-            },
-          });
-          const data = await res.json();
-          setPlayList(data.items);
+          const currentTimeStamp = getCurrentTimeStamp();
+          const tokenExpiryTime = new Date(
+            getLocalStorage("TokenExpirationTime", {}),
+          );
+          if (tokenExpiryTime > currentTimeStamp) {
+            const res = await fetch(`${VITE_API_URL}me/playlists`, {
+              headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+                Authorization: "Bearer " + token,
+              },
+            });
+            const data = await res.json();
+            setPlayList(data.items);
+          } else {
+            const confirm = window.confirm(
+              "Your Token has expired, login to Spotify",
+            );
+            if (confirm) {
+              handleToken([]);
+            }
+          }
         }
         fetchPlayList();
       } catch (error) {
         console.log(error);
       }
     },
-    [token, refresh],
+    [token, refresh, handleToken],
   );
 
   // useEffect(
@@ -80,55 +95,85 @@ function PlayList({
     //   localStorage.setItem("PlayList", JSON.stringify(copyPlayListData));
     //   handleShowPlayListView(id);
     // }
-    const confirmSave = window.confirm(
-      `Do you want to add ${artistInfo.name} to ${playlistName}`,
-    );
-    if (confirmSave) {
-      const res = await fetch(`${VITE_API_URL}playlists/${id}/items`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify({ uris: [selectedSong] }),
-      });
-      const data = await res.json();
-      if (data.snapshot_id) {
-        window.alert("Track Successfully added to Playlist");
+    try {
+      const currentTimeStamp = getCurrentTimeStamp();
+      const tokenExpiryTime = new Date(
+        getLocalStorage("TokenExpirationTime", {}),
+      );
+      if (tokenExpiryTime > currentTimeStamp) {
+        const confirmSave = window.confirm(
+          `Do you want to add ${artistInfo.name} to ${playlistName}`,
+        );
+        if (confirmSave) {
+          const res = await fetch(`${VITE_API_URL}playlists/${id}/items`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+            body: JSON.stringify({ uris: [selectedSong] }),
+          });
+          const data = await res.json();
+          if (data.snapshot_id) {
+            window.alert("Track Successfully added to Playlist");
+          }
+        }
+      } else {
+        const confirm = window.confirm(
+          "Your Token has expired, login to Spotify",
+        );
+        if (confirm) {
+          handleToken([]);
+        }
       }
+    } catch (err) {
+      console.error(err);
     }
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
+    const currentTimeStamp = getCurrentTimeStamp();
+    const tokenExpiryTime = new Date(
+      getLocalStorage("TokenExpirationTime", {}),
+    );
     try {
-      if (!name || !description) {
-        alert("The Name or Description has not been entered");
-        return;
-      }
+      if (tokenExpiryTime > currentTimeStamp) {
+        if (!name || !description) {
+          alert("The Name or Description has not been entered");
+          return;
+        }
 
-      const confirm = window.confirm(
-        `Do you want to Create ${name} as a Playlist 🎧`,
-      );
+        const confirm = window.confirm(
+          `Do you want to Create ${name} as a Playlist 🎧`,
+        );
 
-      if (confirm) {
-        const res = await fetch(`${VITE_API_URL}me/playlists`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-          body: JSON.stringify({
-            name,
-            description,
-            public: true,
-          }),
-        });
+        if (confirm) {
+          const res = await fetch(`${VITE_API_URL}me/playlists`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+            body: JSON.stringify({
+              name,
+              description,
+              public: true,
+            }),
+          });
 
-        const data = await res.json();
-        setRefresh((currState) => !currState);
-        setName("");
-        setDescription("");
+          const data = await res.json();
+          setRefresh((currState) => !currState);
+          setName("");
+          setDescription("");
+        }
+      } else {
+        const confirm = window.confirm(
+          "Your Token has expired, login to Spotify",
+        );
+        if (confirm) {
+          handleToken([]);
+        }
       }
     } catch (error) {
       console.log(error);

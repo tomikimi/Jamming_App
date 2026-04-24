@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getLocalStorage } from "./util/utility";
+import { getLocalStorage, getCurrentTimeStamp } from "./util/utility";
 import PlayListStyle from "./PlayList.module.css";
 import playListViewCSS from "./PlayListView.module.css";
 
@@ -13,7 +13,12 @@ const {
 
 // localStorage.setItem("PlayListDetail", JSON.stringify([1, 1, 1]));
 
-function PlayListView({ playListSongs, token, handleShowPlayListDetail }) {
+function PlayListView({
+  playListSongs,
+  token,
+  handleShowPlayListDetail,
+  handleToken,
+}) {
   //   let copyPlayListData = [...playListSongs];
   //   const index = copyPlayListData.findIndex(
   //     (item) => item.id === selectedPlayList,
@@ -33,25 +38,38 @@ function PlayListView({ playListSongs, token, handleShowPlayListDetail }) {
     //   localStorage.setItem("PlayList", JSON.stringify(copyPlayListData));
     //   setMySongs(copySongs);
     // }
+    const currentTimeStamp = getCurrentTimeStamp();
+    const tokenExpiryTime = new Date(
+      getLocalStorage("TokenExpirationTime", {}),
+    );
     try {
-      const res = await fetch(`${VITE_API_URL}playlists/${id1}/items`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + token,
-        },
-        body: JSON.stringify({
-          items: [{ uri: uri }],
-          snapshot_id: `${snapshot_id}`,
-        }),
-      });
+      if (tokenExpiryTime > currentTimeStamp) {
+        const res = await fetch(`${VITE_API_URL}playlists/${id1}/items`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({
+            items: [{ uri: uri }],
+            snapshot_id: `${snapshot_id}`,
+          }),
+        });
 
-      if (res.ok) {
-        window.alert(`music removed from ${playListName}`);
+        if (res.ok) {
+          window.alert(`music removed from ${playListName}`);
+        }
+        setTimeout(() => {
+          handleShowPlayListDetail(false);
+        }, 3000);
+      } else {
+        const confirm = window.confirm(
+          "Your Token has expired, login to Spotify",
+        );
+        if (confirm) {
+          handleToken([]);
+        }
       }
-      setTimeout(() => {
-        handleShowPlayListDetail(false);
-      }, 3000);
     } catch (err) {
       console.error(err);
     }
@@ -63,39 +81,48 @@ function PlayListView({ playListSongs, token, handleShowPlayListDetail }) {
 
   async function handleEditPlayListName() {
     try {
-      if (!playListName) {
-        window.alert("Playlist Name is required");
-        return;
-      }
-      const confirm = window.confirm(
-        "Are you sure you want to edit the playlist name...",
-      );
+      if (tokenExpiryTime > currentTimeStamp) {
+        if (!playListName) {
+          window.alert("Playlist Name is required");
+          return;
+        }
+        const confirm = window.confirm(
+          "Are you sure you want to edit the playlist name...",
+        );
 
-      if (confirm) {
-        //   let data = JSON.parse(localStorage.getItem("PlayList"));
-        //   data[index].name = playListName;
-        //   localStorage.setItem("PlayList", JSON.stringify(data));
-        //   setPlayListName(data[index].name);
-        //   setEditPlayListName((currState) => !currState);
+        if (confirm) {
+          //   let data = JSON.parse(localStorage.getItem("PlayList"));
+          //   data[index].name = playListName;
+          //   localStorage.setItem("PlayList", JSON.stringify(data));
+          //   setPlayListName(data[index].name);
+          //   setEditPlayListName((currState) => !currState);
 
-        const res = await fetch(`${VITE_API_URL}playlists/${id1}`, {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token,
-          },
-          body: JSON.stringify({
-            name: playListName,
-            description: `A Playlist for ${playListName}`,
-            public: true,
-          }),
-        });
+          const res = await fetch(`${VITE_API_URL}playlists/${id1}`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+            body: JSON.stringify({
+              name: playListName,
+              description: `A Playlist for ${playListName}`,
+              public: true,
+            }),
+          });
 
-        if (res.ok && res.status !== 204) {
+          if (res.ok && res.status !== 204) {
+            setEditPlayListName((currState) => !currState);
+          }
+        } else {
           setEditPlayListName((currState) => !currState);
         }
       } else {
-        setEditPlayListName((currState) => !currState);
+        const confirm = window.confirm(
+          "Your Token has expired, login to Spotify",
+        );
+        if (confirm) {
+          handleToken([]);
+        }
       }
     } catch (error) {
       console.log(error.message);

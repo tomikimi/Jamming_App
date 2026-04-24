@@ -37,8 +37,10 @@ function SearchArtist({ token, handleLoadArtist, handleToken }) {
         }
         handleLoadArtist(data.tracks.items);
       } else {
-        const alert = window.alert("Your Token has expired, login to Spotify");
-        if (alert) {
+        const confirm = window.confirm(
+          "Your Token has expired, login to Spotify",
+        );
+        if (confirm) {
           handleToken([]);
         }
       }
