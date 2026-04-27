@@ -1,16 +1,24 @@
-# React + Vite
+# Spotify Jamming App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This Application is built with ReactJs and linked to my Spotify Account
 
-Currently, two official plugins are available:
+The Application has the ability to
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Access a users Spotify Account
+- Fetch Favourite Artists of a user
+- Create and Edit Playlists
+- Add Favourite Songs to your Playlist
+- Remove Songs from your Playlists
 
-## React Compiler
+## ATTENTION
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+To enjoy this Application, it is advised that you;
 
-## Expanding the ESLint configuration
+- Have a Spotify Account
+- Create an Application in your Spotify Account (Here is a link to the Spotify Web API https://developer.spotify.com/documentation/web-api)
+- Replace your Credentials with the current credentials
+- Add your Application url to your Spotify Application for easy Access to the API
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## For the Purpose of making the App being certified i installed vite-plugin-mkcert
+
+I hope you like the Concept of the Application, feel free to modify the Application and if they are any suggestions, let me know.😁😁😁
