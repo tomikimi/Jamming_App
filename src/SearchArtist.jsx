@@ -41,7 +41,7 @@ function SearchArtist({ token, handleLoadArtist, handleToken }) {
           "Your Token has expired, login to Spotify",
         );
         if (confirm) {
-          handleToken([]);
+          handleToken("");
         }
       }
     } catch (error) {

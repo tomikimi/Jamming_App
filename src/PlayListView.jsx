@@ -67,7 +67,7 @@ function PlayListView({
           "Your Token has expired, login to Spotify",
         );
         if (confirm) {
-          handleToken([]);
+          handleToken("");
         }
       }
     } catch (err) {
@@ -80,6 +80,10 @@ function PlayListView({
   }
 
   async function handleEditPlayListName() {
+    const currentTimeStamp = getCurrentTimeStamp();
+    const tokenExpiryTime = new Date(
+      getLocalStorage("TokenExpirationTime", {}),
+    );
     try {
       if (tokenExpiryTime > currentTimeStamp) {
         if (!playListName) {
@@ -121,7 +125,7 @@ function PlayListView({
           "Your Token has expired, login to Spotify",
         );
         if (confirm) {
-          handleToken([]);
+          handleToken("");
         }
       }
     } catch (error) {

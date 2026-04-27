@@ -146,7 +146,7 @@ function App() {
           "Your Token has expired, login to Spotify",
         );
         if (confirm) {
-          setToken([]);
+          setToken("");
         }
       }
     } catch (error) {
@@ -182,7 +182,7 @@ function App() {
           "Your Token has expired, login to Spotify",
         );
         if (confirm) {
-          setToken([]);
+          setToken("");
         }
       }
     } catch (error) {

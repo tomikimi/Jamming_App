@@ -47,7 +47,7 @@ function PlayList({
               "Your Token has expired, login to Spotify",
             );
             if (confirm) {
-              handleToken([]);
+              handleToken("");
             }
           }
         }
@@ -123,7 +123,7 @@ function PlayList({
           "Your Token has expired, login to Spotify",
         );
         if (confirm) {
-          handleToken([]);
+          handleToken("");
         }
       }
     } catch (err) {
@@ -172,7 +172,7 @@ function PlayList({
           "Your Token has expired, login to Spotify",
         );
         if (confirm) {
-          handleToken([]);
+          handleToken("");
         }
       }
     } catch (error) {
